@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil - Stubborn{% endblock %}
+
+{% block body %}
+<style>
+    .header{ margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+</style>
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
+        .header { display: flex; justify-content: space-between; align-items: center; padding: 20px; border-bottom: 2px solid #ccc; }
+        .logo img { height: 50px; }
+        .nav-links a { margin-left: 20px; text-decoration: none; color: black; font-weight: bold; }
+        .products { display: flex; justify-content: center; margin-top: 20px; flex-wrap: wrap; }
+        .product { border: 2px solid #ccc; padding: 20px; margin: 10px; text-align: center; width: 200px; }
+        .product img { width: 100%; height: 150px; background-color: #eee; display: block; }
+        .footer { text-align: left; padding: 10px; border-top: 2px solid #ccc; margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+<header class="header">
+    <div class="logo">
+        <img src="{{ asset('img/logo-stubborn.png') }}" alt="Stubborn">
+        <div style="font-size: 12px;">Don't compromise on your look</div>
+    </div>
+    <nav class="nav-links">
+        <a href="{{ path('homepage') }}"><strong>Accueil</strong></a>
+        {% if not isConnected %}
+            <a href="{{ path('app_register') }}">S'inscrire</a>
+            <a href="{{ path('app_login') }}">Se connecter</a>
+        {% else %}
+            <a href="{{ path('app_profile') }}">Mon profil</a>
+            <a href="{{ path('app_logout') }}">Déconnexion</a>
+        {% endif %}
+    </nav>
+</header>
+
+<section class="products">
+    {% for product in products %}
+        <div class="product">
+            <img src="{{ asset(product.img) }}" alt="{{ product.name }}">
+            <h3>{{ product.name }}</h3>
+            <p>{{ product.price }} €</p>
+        </div>
+    {% endfor %}
+</section>
+
+<footer class="footer">
+    Informations de la société
+</footer>
+
+</body>
+</html>
+
+{% endblock %}

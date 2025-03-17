@@ -2,7 +2,6 @@
 
 namespace App\Entity;
 
-use App\Enum\SizeEnum;
 use App\Repository\ProductRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -18,9 +17,6 @@ class Product
     #[ORM\Column(length: 15)]
     private ?string $name = null;
 
-    #[ORM\Column(enumType: SizeEnum::class)]
-    private ?SizeEnum $size = null;
-
     #[ORM\Column(type: Types::DECIMAL, precision: 6, scale: 2)]
     private ?string $price = null;
 
@@ -29,6 +25,9 @@ class Product
 
     #[ORM\OneToMany(mappedBy: "product", targetEntity: Stock::class, cascade: ["persist", "remove"])]
     private Collection $stocks;
+
+    #[ORM\Column(type: "boolean")]
+    private bool $top = false;
 
 
     public function getId(): ?int
@@ -44,18 +43,6 @@ class Product
     public function setName(string $name): static
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    public function getSize(): ?SizeEnum
-    {
-        return $this->size;
-    }
-
-    public function setSize(SizeEnum $size): static
-    {
-        $this->size = $size;
 
         return $this;
     }
@@ -82,4 +69,45 @@ class Product
         $this->img = $img;
         return $this;
     }
+
+    public function isTop(): bool
+    {
+        return $this->top;
+    }
+
+    public function setTop(bool $top): static
+    {
+        $this->top = $top;
+        return $this;
+    }
+    public function __construct()
+    {
+        $this->stocks = new ArrayCollection();
+    }
+
+    public function getStocks(): Collection
+    {
+        return $this->stocks;
+    }
+
+    public function addStock(Stock $stock): static
+    {
+        if (!$this->stocks->contains($stock)) {
+            $this->stocks->add($stock);
+            $stock->setProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeStock(Stock $stock): static
+    {
+        if ($this->stocks->removeElement($stock)) {
+            if ($stock->getProduct() === $this) {
+                $stock->setProduct(null);
+            }
+        }
+
+        return $this;
+}
 }

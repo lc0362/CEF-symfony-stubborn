@@ -15,4 +15,13 @@ final class ProductController extends AbstractController
             'controller_name' => 'ProductController',
         ]);
     }
+
+    #[Route('/insert-products', name: 'insert_products')]
+    public function insertProducts(ProductRepository $productRepository): Response
+    {
+        $productRepository->insertProducts();
+
+        return new Response("Les produits ont été insérés en base de données !");
+    }
+
 }
