@@ -24,6 +24,13 @@ class Product
     #[ORM\Column(type: Types::DECIMAL, precision: 6, scale: 2)]
     private ?string $price = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $img = null;
+
+    #[ORM\OneToMany(mappedBy: "product", targetEntity: Stock::class, cascade: ["persist", "remove"])]
+    private Collection $stocks;
+
+
     public function getId(): ?int
     {
         return $this->id;
@@ -62,6 +69,17 @@ class Product
     {
         $this->price = $price;
 
+        return $this;
+    }
+    
+    public function getImg(): ?string
+    {
+        return $this->img;
+    }
+
+    public function setImg(string $img): static
+    {
+        $this->img = $img;
         return $this;
     }
 }

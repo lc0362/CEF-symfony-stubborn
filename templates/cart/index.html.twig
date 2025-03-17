@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello CartController!{% endblock %}
+
+{% block body %}
+<style>
+    .cart { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+</style>
+
+<div class="cart">
+    <h1>Mon Panier</h1>
+    <ul>
+        {% for item in cartProducts %}
+            <li>
+                {{ item.product.name }} - {{ item.quantity }} x {{ item.product.price }} €
+            </li>
+        {% else %}
+            <li>Le panier est vide.</li>
+        {% endfor %}
+    </ul>
+
+    <a href="{{ path('products_list') }}">Continuer mes achats</a>
+
+</div>
+{% endblock %}
