@@ -2,18 +2,18 @@
 
 namespace App\Entity;
 
-use App\Repository\CategoryRepository;
+use App\Repository\ProductsRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: CategoryRepository::class)]
-class Category
+#[ORM\Entity(repositoryClass: ProductsRepository::class)]
+class Products
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 15)]
+    #[ORM\Column(length: 50)]
     private ?string $name = null;
 
     public function getId(): ?int
