@@ -1,17 +1,106 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
-        {% block stylesheets %}
-        {% endblock %}
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Stubborn{% endblock %}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: top;
+            padding: 20px;
+            border-bottom: 2px solid #ccc;
+            margin: 0 20px 0 20px;
+        }
+        .logo div {
+            font-size: 5px;
+            text-transform:uppercase;
+            letter-spacing: -1.5px;
+        }
 
-        {% block javascripts %}
-            {% block importmap %}{{ importmap('app') }}{% endblock %}
-        {% endblock %}
-    </head>
-    <body>
-        {% block body %}{% endblock %}
-    </body>
+        .logo img {
+            width: 200px;
+        }
+
+        .logo{
+            text-align:right;
+        }
+        
+        .nav-links a {
+            margin-left: 20px;
+            text-decoration: none;
+            color: black;  
+        }
+
+        
+        .nav-links a:hover, 
+        .nav-links a.active {
+            text-decoration: underline;
+            font-weight: bold;
+        }
+
+        .footer {
+            text-align: left;
+            padding: 10px;
+            border-top: 2px solid #ccc;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<header class="header">
+    <div class="logo">
+        <a href="{{ path('homepage') }}"><img src="{{ asset('img/logo-stubborn.png') }}" alt="Stubborn" style="height: 100px;"></a>
+        <div style="font-size: 12px;">Don't compromise on your look</div>
+    </div>
+    <nav class="nav-links">
+    {% if app.user %}
+        {% if 'ROLE_CUSTOMER' in app.user.roles %}
+            <!-- Menu pour Customer -->
+            <a href="{{ path('homepage') }}" class="{% if app.request.attributes.get('_route') == 'homepage' %}active{% endif %}">Accueil</a>
+            <a href="{{ path('products_list') }}" class="{% if app.request.attributes.get('_route') == 'products_list' %}active{% endif %}">Boutique</a>
+            <a href="{{ path('cart_show') }}" class="{% if app.request.attributes.get('_route') == 'cart_show' %}active{% endif %}">Panier</a>
+            <a href="{{ path('app_logout') }}">Se déconnecter</a>
+        
+        {% elseif 'ROLE_ADMIN' in app.user.roles %}
+            <!-- Menu pour Admin -->
+            <a href="{{ path('products_list') }}" class="{% if app.request.attributes.get('_route') == 'products_list' %}active{% endif %}">Boutique</a>
+            <a href="{{ path('app_logout') }}">Se déconnecter</a>
+        
+        {% else %}
+            <!-- Cas par défaut pour tout autre utilisateur connecté -->
+            <a href="{{ path('homepage') }}" class="{% if app.request.attributes.get('_route') == 'homepage' %}active{% endif %}">Accueil</a>
+            <a href="{{ path('app_logout') }}">Se déconnecter</a>
+        {% endif %}
+    
+    {% else %}
+        <!-- Menu pour les utilisateurs non connectés -->
+        <a href="{{ path('homepage') }}" class="{% if app.request.attributes.get('_route') == 'homepage' %}active{% endif %}">Accueil</a>
+        <a href="{{ path('app_register') }}" class="{% if app.request.attributes.get('_route') == 'app_register' %}active{% endif %}">S'inscrire</a>
+        <a href="{{ path('app_login') }}" class="{% if app.request.attributes.get('_route') == 'app_login' %}active{% endif %}">Se connecter</a>
+    {% endif %}
+</nav>
+
+
+</header>
+
+<main>
+    {% block body %}{% endblock %}
+</main>
+
+<footer class="footer">
+    <div class="footer-content">
+        <p><strong>Stubborn</strong> | Piccadilly Circus, London W1J 0DA, Royaume-Uni | <a href="mailto:stubborn@blabla.com">stubborn@blabla.com</a></p>
+    </div>
+</footer>
+
+
+</body>
 </html>
