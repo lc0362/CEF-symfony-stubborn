@@ -19,7 +19,6 @@
         border-radius: 10px;
         padding: 15px;
         background-color: #fff;
-        text-align: left;
         width: 250px;
     }
 
@@ -27,18 +26,53 @@
         width: 100%;
         height: auto;
         border-radius: 5px;
+        padding-bottom: 15px;
+    }
+
+    .product-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .product-text {
+        display: flex;
+        flex-direction: column;
     }
 
     .product h3 {
         margin-top: 10px;
         font-size: 18px;
-        color:#00236b;
+        color: #00236b;
         font-weight: bold;
+        
     }
+
+  
 
     .product p {
         font-size: 16px;
         margin-top: 5px;
+    }
+
+    .btn-view {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #89b0ff;
+        color: #fff;
+        padding: 8px 12px;
+        text-decoration: none;
+        font-weight: bold;
+        border-radius: 20px;
+        border: none;
+        margin-left: 15px;
+        width: 6em;
+        height: 2em;
+    }
+
+    .btn-view:hover {
+        background-color: #00236b;
     }
 
     /* Responsive à partir de 600px */
@@ -55,28 +89,24 @@
     }
 </style>
 
-
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-</head>
-<body>
-
 <section class="products">
     {% for product in products %}
         <div class="product">
             <img src="{{ asset(product.img) }}" alt="{{ product.name }}">
-            <h3>{{ product.name }}</h3>
-            <p>{{ product.price }} €</p>
+
+            {% if app.user %}
+                <div class="product-content">
+                    <div class="product-text">
+                        <h3>{{ product.name }}</h3>
+                        <p>{{ product.price }} €</p>
+                    </div>
+                    <a class="btn-view">VOIR</a>
+                </div>
+            {% else %}
+                <h3>{{ product.name }}</h3>
+                <p>{{ product.price }} €</p>
+            {% endif %}
         </div>
     {% endfor %}
 </section>
-
-
-</body>
-</html>
-
 {% endblock %}
