@@ -4,40 +4,42 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Stubborn{% endblock %}</title>
+    <link rel="icon" type="image/jpeg" href="{{ asset('img/favicon-stubborn.png') }}">
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
+            background-color:#eef4ff;
         }
         .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: top;
             padding: 20px;
-            border-bottom: 2px solid #ccc;
-            margin: 0 20px 0 20px;
+            border-bottom: 2px solid #00236b;
+        }
+        .container-header {
+            display: flex;
+            flex-direction: column;  /* Par défaut: vertical */
+            align-items: center;
+            margin: 0 20px;
+            text-align: center;
         }
         .logo div {
             font-size: 5px;
             text-transform:uppercase;
             letter-spacing: -1.5px;
         }
-
         .logo img {
-            width: 200px;
-        }
-
-        .logo{
-            text-align:right;
+            max-width: 200px;
         }
         
-        .nav-links a {
-            margin-left: 20px;
-            text-decoration: none;
-            color: black;  
+        .nav-links {
+            margin-top: 20px;
         }
 
+        .nav-links a {
+            display: inline-block;
+            margin: 8px 10px; /* 8px vertical, 10px horizontal */
+        }
         
         .nav-links a:hover, 
         .nav-links a.active {
@@ -48,14 +50,41 @@
         .footer {
             text-align: left;
             padding: 10px;
-            border-top: 2px solid #ccc;
+            border-top: 2px solid #00236b;
             margin-top: 20px;
         }
+
+        /* À partir d'un écran de 600px */
+        @media screen and (min-width: 600px) {
+            .container-header {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: flex-start;  /* Aligné en haut */
+                text-align: left;
+            }
+
+            .nav-links {
+                display: flex;
+                flex-direction: row;      /* Alignement horizontal */
+                align-items: flex-start;  /* Aligner le haut des liens */
+                margin-top: 0;
+            }
+
+            .nav-links a {
+                margin: 0 10px;  /* Espace horizontal entre les liens */
+            }
+
+            .logo {
+                text-align: right;
+            }
+        }
+
     </style>
 </head>
 <body>
 
 <header class="header">
+<div class="container-header">
     <div class="logo">
         <a href="{{ path('homepage') }}"><img src="{{ asset('img/logo-stubborn.png') }}" alt="Stubborn" style="height: 100px;"></a>
         <div style="font-size: 12px;">Don't compromise on your look</div>
@@ -88,7 +117,7 @@
     {% endif %}
 </nav>
 
-
+</div>
 </header>
 
 <main>

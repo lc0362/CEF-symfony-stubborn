@@ -28,35 +28,43 @@ class RegistrationController extends AbstractController
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
-
+    
         if ($form->isSubmitted() && $form->isValid()) {
-            /** @var string $plainPassword */
             $plainPassword = $form->get('plainPassword')->getData();
-
+            $confirmPassword = $form->get('confirmPassword')->getData();
+    
+            // Vérification des mots de passe AVANT de hasher et enregistrer
+            if ($plainPassword !== $confirmPassword) {
+                $this->addFlash('verify_email_error', 'Les mots de passe ne correspondent pas.');
+                return $this->redirectToRoute('app_register');
+            }
+    
             // Encode et enregistre le mot de passe de l'utilisateur
             $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
-
+    
             $entityManager->persist($user);
             $entityManager->flush();
-
-            // Envoi d'un email de confirmation à l'utilisateur
-            $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
+    
+            // Envoi d'un email de confirmation
+            $this->emailVerifier->sendEmailConfirmation(
+                'app_verify_email',
+                $user,
                 (new TemplatedEmail())
                     ->from(new Address('noreply@stubborn.com', 'Stubborn'))
                     ->to((string) $user->getEmail())
                     ->subject('Une dernière étape pour valider votre compte Stubborn...')
                     ->htmlTemplate('registration/confirmation_email.html.twig')
             );
-
-            // Redirection vers l'accueil après inscription
+    
+            // Redirection après inscription
             return $this->redirectToRoute('homepage');
         }
-
+    
         return $this->render('registration/register.html.twig', [
             'registrationForm' => $form,
         ]);
     }
-
+    
     #[Route('/verify/email', name: 'app_verify_email')]
     public function verifyUserEmail(Request $request, TranslatorInterface $translator): Response
     {

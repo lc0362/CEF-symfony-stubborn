@@ -16,7 +16,7 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\SecurityRequestAttributes;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
 
-class UserAutenticatorAuthenticator extends AbstractLoginFormAuthenticator
+class UserAuthenticatorAuthenticator extends AbstractLoginFormAuthenticator
 {
     use TargetPathTrait;
 
@@ -28,12 +28,13 @@ class UserAutenticatorAuthenticator extends AbstractLoginFormAuthenticator
 
     public function authenticate(Request $request): Passport
     {
-        $email = $request->getPayload()->getString('email');
+        $username = $request->request->get('_username'); 
 
-        $request->getSession()->set(SecurityRequestAttributes::LAST_USERNAME, $email);
+
+        $request->getSession()->set(SecurityRequestAttributes::LAST_USERNAME, $username);
 
         return new Passport(
-            new UserBadge($email),
+            new UserBadge($username),
             new PasswordCredentials($request->getPayload()->getString('password')),
             [
                 new CsrfTokenBadge('authenticate', $request->getPayload()->getString('_csrf_token')),
@@ -48,10 +49,10 @@ class UserAutenticatorAuthenticator extends AbstractLoginFormAuthenticator
             return new RedirectResponse($targetPath);
         }
 
-        // For example:
-        // return new RedirectResponse($this->urlGenerator->generate('some_route'));
-        throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
+        // ✅ Redirige l'utilisateur vers la page d'accueil ou la boutique
+        return new RedirectResponse($this->urlGenerator->generate('homepage'));
     }
+
 
     protected function getLoginUrl(Request $request): string
     {

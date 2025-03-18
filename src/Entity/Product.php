@@ -5,6 +5,9 @@ namespace App\Entity;
 use App\Repository\ProductRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
 class Product
@@ -28,7 +31,6 @@ class Product
 
     #[ORM\Column(type: "boolean")]
     private bool $top = false;
-
 
     public function getId(): ?int
     {

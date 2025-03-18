@@ -7,7 +7,7 @@ security:
         app_user_provider:
             entity:
                 class: App\Entity\User
-                property: email
+                property: name
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
@@ -16,11 +16,14 @@ security:
         main:
             lazy: true
             provider: app_user_provider
-            entry_point: App\Security\UserAutenticatorAuthenticator  # Définit le point d'entrée
-            custom_authenticator: App\Security\UserAutenticatorAuthenticator  # Utilisation de l'authenticator personnalisé
+            entry_point: App\Security\UserAuthenticatorAuthenticator  # Définit le point d'entrée
+            custom_authenticator: App\Security\UserAuthenticatorAuthenticator  # Utilisation de l'authenticator personnalisé
             form_login:
                 login_path: app_login
                 check_path: app_login
+                username_parameter: _username
+                password_parameter: password
+
             logout:
                 path: app_logout
             remember_me:
@@ -32,6 +35,8 @@ security:
     access_control:
         - { path: ^/admin, roles: ROLE_ADMIN }
         - { path: ^/profile, roles: ROLE_USER }
+        - { path: ^/register, roles: PUBLIC_ACCESS }
+        - { path: ^/login, roles: PUBLIC_ACCESS }
       
 
 
