@@ -4,8 +4,57 @@
 
 {% block body %}
 <style>
-    
+    .products {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .product {
+        border: 2px solid #00236b;
+        border-radius: 10px;
+        padding: 15px;
+        background-color: #fff;
+        text-align: left;
+        width: 250px;
+    }
+
+    .product img {
+        width: 100%;
+        height: auto;
+        border-radius: 5px;
+    }
+
+    .product h3 {
+        margin-top: 10px;
+        font-size: 18px;
+        color:#00236b;
+        font-weight: bold;
+    }
+
+    .product p {
+        font-size: 16px;
+        margin-top: 5px;
+    }
+
+    /* Responsive à partir de 600px */
+    @media (min-width: 600px) {
+        .products {
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .product {
+            width: 280px;
+        }
+    }
 </style>
+
 
 <!DOCTYPE html>
 <html lang="fr">
