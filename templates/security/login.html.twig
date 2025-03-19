@@ -1,31 +1,128 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Log in!{% endblock %}
+{% block title %}Se connecter{% endblock %}
 
 {% block body %}
-<form method="post">
+<style>
+    .login-container {
+        width: 300px;
+        margin: 40px auto;
+        border: 5px solid #00236b;
+        border-radius: 30px;
+        padding: 20px;
+        background-color: #eef4ff;
+    }
+
+    .login-container h1, .login-container h2 {
+        font-size: 16px;
+        border-bottom: 2px solid #89b0ff;
+        padding-bottom: 15px;
+        margin-bottom: 20px;
+    }
+
+    .login-container label {
+        display: block;
+        margin-top: 20px;
+        margin-bottom: 5px;
+    }
+
+    .login-container input[type="text"],
+    .login-container input[type="password"] {
+        width: 90%;
+        border: 1px solid #00236b;
+        border-radius: 5px;
+        min-height: 2em;
+        padding: 5px;
+    }
+
+    .btn-submit, .btn-register {
+        display: inline-block;
+        background-color: #89b0ff;
+        color: #fff;
+        padding: 10px 20px;
+        text-decoration: none;
+        font-weight: bold;
+        border-radius: 5px;
+        border: none;
+        margin-top: 15px;
+        cursor: pointer;
+        font-size: 16px;
+
+    }
+
+    .btn-submit:hover, .btn-register:hover {
+        background-color: #00236b;
+    }
+
+    .forgot-password {
+        display: block;
+        margin-top: 10px;
+        color: #a855f7;
+        text-decoration: underline;
+        font-weight: normal;
+    }
+
+    .forgot-password:hover {
+        font-weight: bold;
+    }
+
+    .section-register {
+        margin-top: 30px;
+        border-top: 2px solid #89b0ff;
+        padding-top: 15px;
+    }
+
+    .section-register h2 {
+        border-bottom: none;
+        padding-bottom: 1px;
+        margin-top: 0px;
+        margin-bottom: 0px;
+    }
+
+    .alert-danger {
+        background-color: #f8d7da;
+        color: #721c24;
+        padding: 10px;
+        border-radius: 5px;
+        margin-bottom: 15px;
+        border: 1px solid #f5c6cb;
+    }
+
+    .logout-message {
+        margin-bottom: 15px;
+        color: #333;
+    }
+</style>
+
+<div class="login-container">
     {% if error %}
         <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
     {% endif %}
 
     {% if app.user %}
-        <div class="mb-3">
+        <div class="logout-message">
             Vous êtes connecté en tant que {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
         </div>
     {% endif %}
 
-    <h2>Se connecter</h2>
-    <label for="inputName">Nom d'utilisateur</label>
-    <input type="text" value="{{ last_username }}" name="_username" id="inputName" class="form-control" autocomplete="username" required autofocus>
-    <label for="inputPassword">Password</label>
-    <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
+    <h1>Se connecter</h1>
+    <form method="post">
+        <label for="inputName">Nom d'utilisateur :</label>
+        <input type="text" value="{{ last_username }}" name="_username" id="inputName" autocomplete="username" required autofocus>
 
-    <input type="hidden" name="_csrf_token"
-           value="{{ csrf_token('authenticate') }}"
-    >
+        <label for="inputPassword">Mot de passe :</label>
+        <input type="password" name="password" id="inputPassword" autocomplete="current-password" required>
 
-    <button class="btn btn-lg btn-primary" type="submit">
-        Se Connecter
-    </button>
-</form>
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+        <button class="btn-submit" type="submit">Se Connecter</button>
+
+        <a href="{{ path('app_forgot_password') }}" class="forgot-password">Mot de passe oublié</a>
+    </form>
+
+    <div class="section-register">
+        <h2>Pas encore inscrit ?</h2>
+        <a href="{{ path('app_register') }}" class="btn-register">Créer un compte</a>
+    </div>
+</div>
 {% endblock %}
