@@ -39,12 +39,17 @@
         .nav-links a {
             display: inline-block;
             margin: 8px 10px; /* 8px vertical, 10px horizontal */
+            text-decoration: none;
         }
         
         .nav-links a:hover, 
         .nav-links a.active {
             text-decoration: underline;
             font-weight: bold;
+        }
+
+        .logout{
+            padding-left:2em;
         }
 
         .footer {
@@ -96,17 +101,17 @@
             <a href="{{ path('homepage') }}" class="{% if app.request.attributes.get('_route') == 'homepage' %}active{% endif %}">Accueil</a>
             <a href="{{ path('products_list') }}" class="{% if app.request.attributes.get('_route') == 'products_list' %}active{% endif %}">Boutique</a>
             <a href="{{ path('cart_show') }}" class="{% if app.request.attributes.get('_route') == 'cart_show' %}active{% endif %}">Panier</a>
-            <a href="{{ path('app_logout') }}">Se déconnecter</a>
+            <a href="{{ path('app_logout') }}" class="logout">Se déconnecter</a>
         
         {% elseif 'ROLE_ADMIN' in app.user.roles %}
             <!-- Menu pour Admin -->
             <a href="{{ path('products_list') }}" class="{% if app.request.attributes.get('_route') == 'products_list' %}active{% endif %}">Boutique</a>
-            <a href="{{ path('app_logout') }}">Se déconnecter</a>
+            <a href="{{ path('app_logout') }}" class="logout">Se déconnecter</a>
         
         {% else %}
             <!-- Cas par défaut pour tout autre utilisateur connecté -->
             <a href="{{ path('homepage') }}" class="{% if app.request.attributes.get('_route') == 'homepage' %}active{% endif %}">Accueil</a>
-            <a href="{{ path('app_logout') }}">Se déconnecter</a>
+            <a href="{{ path('app_logout') }}" class="logout">Se déconnecter</a>
         {% endif %}
     
     {% else %}

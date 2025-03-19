@@ -1,11 +1,18 @@
-<h1>Hi! Please confirm your email!</h1>
+<div style="width: 300px; margin: 40px auto; border: 5px solid #00236b; border-radius: 30px; padding: 20px; background-color: #eef4ff; text-align: center; font-family: Arial, sans-serif; color: #00236b;">
 
-<p>
-    Please confirm your email address by clicking the following link: <br><br>
-    <a href="{{ signedUrl|raw }}">Confirm my Email</a>.
-    This link will expire in {{ expiresAtMessageKey|trans(expiresAtMessageData, 'VerifyEmailBundle') }}.
-</p>
+    <h1 style="border-bottom: 2px solid #89b0ff; padding-bottom: 15px;">Bonjour {{ name }}</h1>
 
-<p>
-    Cheers!
-</p>
+    <p>Pour finaliser votre inscription, merci de confirmer votre adresse email en cliquant sur le bouton ci-dessous :</p>
+
+    <a href="{{ signedUrl|raw }}" 
+       style="display: inline-block; background-color: #89b0ff; color: #fff; text-decoration: none; font-weight: bold; border-radius: 5px; border: none; margin-top: 15px; padding: 10px 20px; cursor: pointer; font-size: 16px;">
+       Confirmer mon email
+    </a>
+
+    <p style="color: #555; font-size: 14px; margin-top: 20px;">
+        Ce lien expirera dans {{ expiresAtMessageKey|trans(expiresAtMessageData, 'VerifyEmailBundle') }}.
+    </p>
+
+
+    <p style="margin-top: 20px;">Merci et à très vite sur <strong>Stubborn</strong> ! 🚀</p>
+</div>

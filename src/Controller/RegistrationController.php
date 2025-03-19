@@ -15,6 +15,9 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
+use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
+use App\Security\UserAuthenticatorAuthenticator;
+
 
 class RegistrationController extends AbstractController
 {
@@ -23,28 +26,32 @@ class RegistrationController extends AbstractController
     }
 
     #[Route('/register', name: 'app_register')]
-    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
+    public function register(
+        Request $request, 
+        UserPasswordHasherInterface $userPasswordHasher, 
+        EntityManagerInterface $entityManager, 
+        UserAuthenticatorInterface $userAuthenticator, 
+        UserAuthenticatorAuthenticator $authenticator 
+    ): Response
     {
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
-    
+
         if ($form->isSubmitted() && $form->isValid()) {
             $plainPassword = $form->get('plainPassword')->getData();
             $confirmPassword = $form->get('confirmPassword')->getData();
-    
-            // Vérification des mots de passe AVANT de hasher et enregistrer
+
             if ($plainPassword !== $confirmPassword) {
                 $this->addFlash('verify_email_error', 'Les mots de passe ne correspondent pas.');
                 return $this->redirectToRoute('app_register');
             }
-    
-            // Encode et enregistre le mot de passe de l'utilisateur
+
             $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
-    
+
             $entityManager->persist($user);
             $entityManager->flush();
-    
+
             // Envoi d'un email de confirmation
             $this->emailVerifier->sendEmailConfirmation(
                 'app_verify_email',
@@ -54,27 +61,42 @@ class RegistrationController extends AbstractController
                     ->to((string) $user->getEmail())
                     ->subject('Une dernière étape pour valider votre compte Stubborn...')
                     ->htmlTemplate('registration/confirmation_email.html.twig')
+                    ->context([
+                        'name' => $user->getName(), 
+                    ])
             );
-    
-            // Redirection après inscription
-            return $this->redirectToRoute('homepage');
+
+            // 🔥 Authentification automatique après inscription
+            return $userAuthenticator->authenticateUser(
+                $user,
+                $authenticator,
+                $request
+            );
         }
-    
+
         return $this->render('registration/register.html.twig', [
             'registrationForm' => $form,
         ]);
     }
+
     
     #[Route('/verify/email', name: 'app_verify_email')]
-    public function verifyUserEmail(Request $request, TranslatorInterface $translator): Response
+    public function verifyUserEmail(
+        Request $request, 
+        TranslatorInterface $translator, 
+        EntityManagerInterface $entityManager
+    ): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        // Validation du lien de confirmation d'email
         try {
             /** @var User $user */
             $user = $this->getUser();
             $this->emailVerifier->handleEmailConfirmation($request, $user);
+
+            // 🔥 Mise à jour en base
+            $entityManager->flush();
+
         } catch (VerifyEmailExceptionInterface $exception) {
             $this->addFlash('verify_email_error', $translator->trans($exception->getReason(), [], 'VerifyEmailBundle'));
             return $this->redirectToRoute('app_register');
@@ -82,6 +104,7 @@ class RegistrationController extends AbstractController
 
         $this->addFlash('success', 'Votre adresse email a bien été vérifiée.');
 
-        return $this->redirectToRoute('homepage'); // Redirection vers la home après vérification de l'email
+        return $this->redirectToRoute('homepage');
     }
+
 }
