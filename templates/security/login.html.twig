@@ -92,6 +92,11 @@
         margin-bottom: 15px;
         color: #333;
     }
+
+    .logout-link:hover {
+        font-weight: bold;
+    }
+
 </style>
 
 <div class="login-container">
@@ -101,7 +106,8 @@
 
     {% if app.user %}
         <div class="logout-message">
-            Vous êtes connecté en tant que {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
+            Vous êtes connecté en tant que <strong>{{ app.user.userIdentifier }}</strong>. 
+            <a href="{{ path('app_logout') }}" class="logout-link">Se déconnecter</a>
         </div>
     {% endif %}
 

@@ -1,0 +1,131 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Back Office{% endblock %}
+
+{% block body %}
+<style>
+    .back-office-container {
+        width: 90%;
+        margin: 40px auto;
+        font-family: Arial, sans-serif;
+    }
+
+    .product-form, .product-item {
+        border: 5px solid #00236b;
+        border-radius: 30px;
+        background-color: #eef4ff;
+        padding: 20px;
+        margin-bottom: 30px;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .product-form {
+        background-color: #d8e3f9;
+    }
+
+    .product-item img, .add-photo-btn {
+        width: 100px;
+        height: 100px;
+        border-radius: 10px;
+        border: 2px solid #00236b;
+        object-fit: cover;
+        background-color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        cursor: pointer;
+    }
+
+    .product-form input, .product-item input {
+        width: 120px;
+        min-width: 100px;
+        padding: 8px;
+        border: 1px solid #00236b;
+        border-radius: 5px;
+        flex: 1 1 100px;
+    }
+
+    .btn-action {
+        background-color: #89b0ff;
+        color: #fff;
+        text-decoration: none;
+        font-weight: bold;
+        border-radius: 5px;
+        border: none;
+        padding: 10px 20px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    .btn-action:hover {
+        background-color: #00236b;
+    }
+
+    .product-infos {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        flex: 1;
+    }
+
+    .product-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+</style>
+
+<div class="back-office-container">
+
+    <h1>Back Office</h1>
+
+    <!-- Formulaire d'ajout -->
+    <form method="POST" enctype="multipart/form-data" class="product-form">
+        <!-- Bouton Ajouter une photo -->
+        <label class="add-photo-btn">
+            Ajouter<br>une photo
+            <input type="file" name="image" accept="image/*" style="display: none;">
+        </label>
+
+        <!-- Champs produit -->
+        <div class="product-infos">
+            <input type="text" name="name" placeholder="Nom" required>
+            <input type="text" name="price" placeholder="Prix" required>
+            <input type="number" name="stock_XS" placeholder="Stock XS" min="0">
+            <input type="number" name="stock_S" placeholder="Stock S" min="0">
+            <input type="number" name="stock_M" placeholder="Stock M" min="0">
+            <input type="number" name="stock_L" placeholder="Stock L" min="0">
+            <input type="number" name="stock_XL" placeholder="Stock XL" min="0">
+            <input type="hidden" name="top" value="0">
+        </div>
+
+        <button type="submit" class="btn-action">AJOUTER</button>
+    </form>
+
+
+    <!-- Liste des produits modifiables -->
+    {% for product in products %}
+        <form method="POST" class="product-item" action="{{ path('update_product', { 'id': product.id }) }}">
+            <img src="{{ asset(product.img) }}" alt="{{ product.name }}">
+
+            <div class="product-infos">
+                <input type="text" name="name" value="{{ product.name }}">
+                <input type="text" name="price" value="{{ product.price }}">
+                {% for stock in product.stocks %}
+                    <input type="number" name="stock_{{ stock.size.value }}" value="{{ stock.quantity }}">
+                {% endfor %}
+            </div>
+
+            <div class="product-actions">
+                <button type="submit" class="btn-action">MODIFIER</button>
+                <a href="{{ path('delete_product', { 'id': product.id }) }}" class="btn-action">SUPPRIMER</a>
+            </div>
+        </form>
+    {% endfor %}
+
+</div>
+{% endblock %}
