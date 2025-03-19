@@ -11,27 +11,45 @@
     }
 
     .product-form, .product-item {
-        border: 5px solid #00236b;
-        border-radius: 30px;
-        background-color: #eef4ff;
+        border-radius: 10px;
         padding: 20px;
         margin-bottom: 30px;
         display: flex;
-        flex-wrap: wrap;
+        gap: 20px;
         align-items: center;
-        gap: 15px;
+    }
+
+    .product-item {
+        background-color: #d8e3f9;
+        border: 5px solid #00236b;
     }
 
     .product-form {
-        background-color: #d8e3f9;
+        border: 5px solid #a80e00;
+        background-color: #ffafa8;
     }
 
-    .product-item img, .add-photo-btn {
-        width: 100px;
-        height: 100px;
+    .img-container {
+        width: 150px;
+        height: auto;
         border-radius: 10px;
-        border: 2px solid #00236b;
+        background-color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+
+    .img-container img {
+        width: 100%;
+        height: 100%;
         object-fit: cover;
+    }
+
+    .add-photo-btn {
+        width: 150px;
+        height: 150px;
+        border-radius: 10px;
         background-color: #fff;
         display: flex;
         align-items: center;
@@ -40,13 +58,35 @@
         cursor: pointer;
     }
 
-    .product-form input, .product-item input {
+    .add-photo-btn:hover {
+        font-weight: bold;
+        text-decoration: underline;
+    }
+
+    .product-content {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .product-infos {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .product-infos label {
+        display: flex;
+        flex-direction: column;
+        color: #515c72;
+    }
+
+    .product-infos input {
         width: 120px;
         min-width: 100px;
         padding: 8px;
         border: 1px solid #00236b;
         border-radius: 5px;
-        flex: 1 1 100px;
     }
 
     .btn-action {
@@ -59,23 +99,30 @@
         padding: 10px 20px;
         cursor: pointer;
         font-size: 16px;
+        text-align: center;
+        text-transform: uppercase;
+        max-width: 200px;
     }
 
     .btn-action:hover {
         background-color: #00236b;
     }
 
-    .product-infos {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-        flex: 1;
+    .btn-supprimer {
+        background-color: #ffafa8;
     }
 
-    .product-actions {
+    .btn-supprimer:hover {
+        background-color: #a80e00;
+        color: #fff;
+    }
+
+    .actions-container {
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
         gap: 10px;
+        margin-top: 15px;
+        justify-content: end;
     }
 </style>
 
@@ -85,47 +132,89 @@
 
     <!-- Formulaire d'ajout -->
     <form method="POST" enctype="multipart/form-data" class="product-form">
-        <!-- Bouton Ajouter une photo -->
+        <!-- Colonne image -->
         <label class="add-photo-btn">
             Ajouter<br>une photo
             <input type="file" name="image" accept="image/*" style="display: none;">
         </label>
 
-        <!-- Champs produit -->
-        <div class="product-infos">
-            <input type="text" name="name" placeholder="Nom" required>
-            <input type="text" name="price" placeholder="Prix" required>
-            <input type="number" name="stock_XS" placeholder="Stock XS" min="0">
-            <input type="number" name="stock_S" placeholder="Stock S" min="0">
-            <input type="number" name="stock_M" placeholder="Stock M" min="0">
-            <input type="number" name="stock_L" placeholder="Stock L" min="0">
-            <input type="number" name="stock_XL" placeholder="Stock XL" min="0">
-            <input type="hidden" name="top" value="0">
+        <!-- Colonne inputs + bouton -->
+        <div class="product-content">
+            <p id="imageMessage" style="font-weight: bold;"></p>
+
+            <div class="product-infos">
+                <input type="text" name="name" placeholder="Nom" required>
+                <input type="text" name="price" placeholder="Prix" required>
+                <input type="number" name="stock_XS" placeholder="Taille XS" min="0">
+                <input type="number" name="stock_S" placeholder="Taille S" min="0">
+                <input type="number" name="stock_M" placeholder="Taille M" min="0">
+                <input type="number" name="stock_L" placeholder="Taille L" min="0">
+                <input type="number" name="stock_XL" placeholder="Taille XL" min="0">
+                <input type="hidden" name="top" value="0">
+            </div>
+
+            <div class="actions-container">
+                <button type="submit" class="btn-action">Ajouter</button>
+            </div>
         </div>
-
-        <button type="submit" class="btn-action">AJOUTER</button>
     </form>
-
 
     <!-- Liste des produits modifiables -->
     {% for product in products %}
         <form method="POST" class="product-item" action="{{ path('update_product', { 'id': product.id }) }}">
-            <img src="{{ asset(product.img) }}" alt="{{ product.name }}">
-
-            <div class="product-infos">
-                <input type="text" name="name" value="{{ product.name }}">
-                <input type="text" name="price" value="{{ product.price }}">
-                {% for stock in product.stocks %}
-                    <input type="number" name="stock_{{ stock.size.value }}" value="{{ stock.quantity }}">
-                {% endfor %}
+            <div class="img-container">
+                <img src="{{ asset(product.img) }}" alt="{{ product.name }}">
             </div>
 
-            <div class="product-actions">
-                <button type="submit" class="btn-action">MODIFIER</button>
-                <a href="{{ path('delete_product', { 'id': product.id }) }}" class="btn-action">SUPPRIMER</a>
+            <div class="product-content">
+                <div class="product-infos">
+                    <label>Nom
+                        <input type="text" name="name" value="{{ product.name }}">
+                    </label>
+
+                    <label>Prix
+                        <input type="text" name="price" value="{{ product.price }}">
+                    </label>
+
+                    {% for stock in product.stocks %}
+                        <label>Taille {{ stock.size.value }}
+                            <input type="number" name="stock_{{ stock.size.value }}" value="{{ stock.quantity }}">
+                        </label>
+                    {% endfor %}
+                </div>
+
+                <div class="actions-container">
+                    <a href="{{ path('delete_product', { 'id': product.id }) }}" class="btn-action btn-supprimer">Supprimer</a>
+                    <button type="submit" class="btn-action">Modifier</button>
+                </div>
             </div>
         </form>
     {% endfor %}
-
 </div>
+
+<!-- JS vérification image -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const fileInput = document.querySelector('input[name="image"]');
+    const message = document.getElementById('imageMessage');
+
+    fileInput.addEventListener('change', function() {
+        const file = fileInput.files[0];
+        if (file) {
+            const maxSize = 2 * 1024 * 1024 * 1024; // 2 Go
+            const isJpg = file.type === 'image/jpeg';
+
+            if (!isJpg || file.size > maxSize) {
+                message.style.color = 'red';
+                message.textContent = 'Chargez une image jpg de moins de 2Go';
+            } else {
+                message.style.color = 'green';
+                message.textContent = 'Image chargée';
+            }
+        } else {
+            message.textContent = '';
+        }
+    });
+});
+</script>
 {% endblock %}
