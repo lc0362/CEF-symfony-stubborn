@@ -14,7 +14,7 @@
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
-    justify-content: center;
+
     
 }
 
@@ -48,6 +48,7 @@
     border-radius: 20px;
     margin-bottom: 10px;
     margin: 5px 15px 5px;
+    transition: background-color 0.3s, opacity 0.3s;
 }
 
 .filter form button:hover {
@@ -119,7 +120,7 @@
     width: 6em;
     height: 2em;
     text-transform: uppercase;
-    
+    transition: background-color 0.3s, opacity 0.3s;
 }
 
 .btn-view:hover {
@@ -148,6 +149,10 @@
     }
 }
 </style>
+
+<nav class="breadcrumb">
+    <a href="{{ path('homepage') }}">Accueil</a> &gt; <span>Boutique</span>
+</nav>
 
 <div class="container">
     <div class="products-wrapper">

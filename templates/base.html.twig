@@ -12,6 +12,7 @@
             padding: 0;
             background-color:#eef4ff;
             color:#00091d;
+            cursor:default;
         }
         input {
             color:#00091d;
@@ -53,7 +54,9 @@
         }
 
         .logout {
-            padding-left: 2em;
+            padding-left: 1em;
+            margin-left: auto;
+            
         }
 
         .footer {
@@ -67,8 +70,7 @@
             .container-header {
                 flex-direction: row;
                 justify-content: space-between;
-                align-items: flex-start;
-                text-align: left;
+                align-items: flex-start; 
             }
 
             .nav-links {
@@ -76,6 +78,8 @@
                 flex-direction: row;
                 align-items: flex-start;
                 margin-top: 0;
+                flex-wrap: wrap;
+                justify-content: flex-end;
             }
 
             .nav-links a {
@@ -85,7 +89,20 @@
             .logo {
                 text-align: right;
             }
+            .logout {
+                padding-left: 10em;      
+                padding-top: 10px;  
+                text-align: right; 
+            }
+            
         }
+         @media screen and (min-width: 700px) {
+            .logout {
+            padding-left: 2em;
+            margin-left: auto;
+            padding-top: 0px; 
+            }
+         }
 
         /* Style du bouton Back To Top */
         #backToTop {
@@ -100,7 +117,6 @@
             height: 60px;
             font-size: 24px;
             cursor: pointer;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
             display: none; /* Caché par défaut */
             align-items: center;
             justify-content: center;
@@ -110,6 +126,25 @@
 
         #backToTop:hover {
             background-color: #00236b;
+        }
+        .breadcrumb {
+            font-size: 16px;
+            margin: 20px 0;
+            color: #00236b;
+            margin: 40px;
+        }
+
+        .breadcrumb a {
+            color: #00236b;
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        .breadcrumb span {
+            font-weight: bold;
         }
     </style>
 </head>

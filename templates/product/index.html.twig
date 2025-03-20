@@ -29,7 +29,8 @@
 }
 
 .product-img img {
-    max-width: 600px;
+    max-width: 400px;
+    min-width: 380px;
     width: 100%;
     height: auto;
     border-radius: 10px;
@@ -88,37 +89,23 @@
     transition: background-color 0.3s;
     margin-top:3em;
     border: 5px solid #eef4ff;
-
+    transition: border 0.5s, opacity 0.3s;
 }
 
 .btn-add:hover {
     border: 5px solid #89b0ff;
 }
 
-.breadcrumb {
-    font-size: 16px;
-    margin: 20px 0;
-    color: #00236b;
-    margin: 40px;
-}
 
-.breadcrumb a {
-    color: #00236b;
-    text-decoration: none;
-}
-
-.breadcrumb a:hover {
-    text-decoration: underline;
-}
-
-.breadcrumb span {
-    font-weight: bold;
-}
 
 
 @media (min-width: 655px) {
    .btn-add {
         margin-top:5em;
+    }
+    .product-img img {
+        max-width: 550px;
+        min-width: 400px;
     }
 }
 
@@ -126,7 +113,7 @@
 @media (min-width: 900px) {
    .btn-add {
         margin-top:10em;
-    }    
+    } 
 }
 
 </style>
