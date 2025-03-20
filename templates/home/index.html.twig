@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Accueil - Stubborn{% endblock %}
+{% block title %}Stubborn | Don't compromise on your look {% endblock %}
 
 {% block body %}
 <style>
@@ -69,6 +69,8 @@
         margin-left: 15px;
         width: 6em;
         height: 2em;
+        cursor:pointer;
+        text-transform: uppercase;
     }
 
     .btn-view:hover {
@@ -100,7 +102,7 @@
                         <h3>{{ product.name }}</h3>
                         <p>{{ product.price }} €</p>
                     </div>
-                    <a class="btn-view">VOIR</a>
+                    <a href="{{ path('product_show', { id: product.id }) }}" class="btn-view">Voir</a>
                 </div>
             {% else %}
                 <h3>{{ product.name }}</h3>

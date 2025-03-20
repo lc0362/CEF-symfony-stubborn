@@ -1,21 +1,166 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Product{% endblock %}
+{% block title %}{{ product.name }} - Stubborn{% endblock %}
 
 {% block body %}
 <style>
-    .product-page { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+
+.product-container {
+    max-width: 1200px;
+    padding: 30px;
+    margin: 40px auto;
+    border: 5px solid #00236b;
+    border-radius: 30px;
+    background-color: #eef4ff;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 50px;
+    align-items: center;
+    justify-content: center;
+}
+
+.body-space{
+    margin: 0 10px;
+}
+
+.product-img {
+    flex: 1 1 50%;
+    text-align: center;
+}
+
+.product-img img {
+    max-width: 600px;
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+}
+
+.product-info {
+    flex: 1 1 40%;
+    display: flex;
+    flex-direction: column;
+}
+
+.product-info h1 {
+    font-size: 45px;
+    color: #00236b;
+    border-bottom: 3px solid #89b0ff;
+    padding-bottom: 15px;
+    max-width:20em;
+}
+
+.product-info p {
+    font-size: 22px;
+    color: #00236b;
+}
+
+.size-selector {
+    display: flex;
+    flex-direction: column;
+    max-width:20em;
+}
+
+.size-selector select {
+    padding: 12px;
+    border-radius: 5px;
+    border: 2px solid #00236b;
+    font-size: 18px;
+    width: 100%;
+    background-color: #fff;
+}
+
+.size-selector select option:disabled {
+    color: #ccc;
+}
+
+.btn-add {
+    display: inline-block;
+    background-color: #00236b;
+    color: #fff;
+    padding: 15px 30px;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    text-transform: uppercase;
+    transition: background-color 0.3s;
+    margin-top:3em;
+    border: 5px solid #eef4ff;
+
+}
+
+.btn-add:hover {
+    border: 5px solid #89b0ff;
+}
+
+.breadcrumb {
+    font-size: 16px;
+    margin: 20px 0;
+    color: #00236b;
+    margin: 40px;
+}
+
+.breadcrumb a {
+    color: #00236b;
+    text-decoration: none;
+}
+
+.breadcrumb a:hover {
+    text-decoration: underline;
+}
+
+.breadcrumb span {
+    font-weight: bold;
+}
+
+
+@media (min-width: 655px) {
+   .btn-add {
+        margin-top:5em;
+    }
+}
+
+
+@media (min-width: 900px) {
+   .btn-add {
+        margin-top:10em;
+    }    
+}
+
 </style>
+<nav class="breadcrumb">
+    <a href="{{ path('homepage') }}">Accueil</a> &gt; <a href="{{ path('products_list') }}">Boutique</a> &gt; <span>{{ product.name }}</span>
+</nav>
 
-<div class="product-page">
-    <h1>{{ product.name }}</h1>
-    <p>Prix : {{ product.price }} €</p>
+<div class="body-space">
+<div class="product-container">
+    <div class="product-img">
+        <img src="{{ asset(product.img) }}" alt="{{ product.name }}">
+    </div>
 
-    <form action="{{ path('cart_add', { id: product.id }) }}" method="post">
-        <button type="submit">Ajouter au panier</button>
-    </form>
+    <div class="product-info">
+        <h1>{{ product.name }}</h1>
+        <p>{{ product.price }} €</p>
 
-    <a href="{{ path('products_list') }}">Retour à la liste</a>
+        <form method="post">
+            <div class="size-selector">
+                <select name="size" id="size" required>
+                    <option value="" disabled selected hidden>Taille</option>
+                    {% for stock in product.stocks %}
+                        <option value="{{ stock.size.value }}" {% if stock.quantity == 0 %}disabled{% endif %}>
+                            {{ stock.size.value }} {% if stock.quantity == 0 %}(Rupture){% endif %}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
 
+            <input type="hidden" name="quantity" value="1">
+
+            <button type="submit" class="btn-add">Ajouter au panier</button>
+        </form>
+    </div>
+</div>
 </div>
 {% endblock %}

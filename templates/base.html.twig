@@ -22,14 +22,14 @@
         }
         .container-header {
             display: flex;
-            flex-direction: column;  /* Par défaut: vertical */
+            flex-direction: column;
             align-items: center;
             margin: 0 20px;
             text-align: center;
         }
         .logo div {
             font-size: 5px;
-            text-transform:uppercase;
+            text-transform: uppercase;
             letter-spacing: -1.5px;
         }
         .logo img {
@@ -42,7 +42,7 @@
 
         .nav-links a {
             display: inline-block;
-            margin: 8px 10px; /* 8px vertical, 10px horizontal */
+            margin: 8px 10px;
             text-decoration: none;
         }
         
@@ -52,8 +52,8 @@
             font-weight: bold;
         }
 
-        .logout{
-            padding-left:2em;
+        .logout {
+            padding-left: 2em;
         }
 
         .footer {
@@ -63,24 +63,23 @@
             margin-top: 20px;
         }
 
-        /* À partir d'un écran de 600px */
         @media screen and (min-width: 600px) {
             .container-header {
                 flex-direction: row;
                 justify-content: space-between;
-                align-items: flex-start;  /* Aligné en haut */
+                align-items: flex-start;
                 text-align: left;
             }
 
             .nav-links {
                 display: flex;
-                flex-direction: row;      /* Alignement horizontal */
-                align-items: flex-start;  /* Aligner le haut des liens */
+                flex-direction: row;
+                align-items: flex-start;
                 margin-top: 0;
             }
 
             .nav-links a {
-                margin: 0 10px;  /* Espace horizontal entre les liens */
+                margin: 0 10px;
             }
 
             .logo {
@@ -88,45 +87,62 @@
             }
         }
 
+        /* Style du bouton Back To Top */
+        #backToTop {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: #89b0ff;
+            color: #eef4ff;
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            display: none; /* Caché par défaut */
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s, opacity 0.3s;
+            z-index: 100;
+        }
+
+        #backToTop:hover {
+            background-color: #00236b;
+        }
     </style>
 </head>
+
 <body>
 
 <header class="header">
-<div class="container-header">
-    <div class="logo">
-        <a href="{{ path('homepage') }}"><img src="{{ asset('img/logo-stubborn.png') }}" alt="Stubborn" style="height: 100px;"></a>
-        <div style="font-size: 12px;">Don't compromise on your look</div>
-    </div>
-    <nav class="nav-links">
-    {% if app.user %}
-        {% if 'ROLE_CUSTOMER' in app.user.roles %}
-            <!-- Menu pour Customer -->
-            <a href="{{ path('homepage') }}" class="{% if app.request.attributes.get('_route') == 'homepage' %}active{% endif %}">Accueil</a>
-            <a href="{{ path('products_list') }}" class="{% if app.request.attributes.get('_route') == 'products_list' %}active{% endif %}">Boutique</a>
-            <a href="{{ path('cart_show') }}" class="{% if app.request.attributes.get('_route') == 'cart_show' %}active{% endif %}">Panier</a>
-            <a href="{{ path('app_logout') }}" class="logout">Se déconnecter</a>
-        
-        {% elseif 'ROLE_ADMIN' in app.user.roles %}
-            <!-- Menu pour Admin -->
-            <a href="{{ path('products_list') }}" class="{% if app.request.attributes.get('_route') == 'products_list' %}active{% endif %}">Boutique</a>
-            <a href="{{ path('app_logout') }}" class="logout">Se déconnecter</a>
-        
+    <div class="container-header">
+        <div class="logo">
+            <a href="{{ path('homepage') }}"><img src="{{ asset('img/logo-stubborn.png') }}" alt="Stubborn" style="height: 100px;"></a>
+            <div style="font-size: 12px;">Don't compromise on your look</div>
+        </div>
+        <nav class="nav-links">
+        {% if app.user %}
+            {% if 'ROLE_CUSTOMER' in app.user.roles %}
+                <a href="{{ path('homepage') }}" class="{% if app.request.attributes.get('_route') == 'homepage' %}active{% endif %}">Accueil</a>
+                <a href="{{ path('products_list') }}" class="{% if app.request.attributes.get('_route') == 'products_list' %}active{% endif %}">Boutique</a>
+                <a href="{{ path('cart_show') }}" class="{% if app.request.attributes.get('_route') == 'cart_show' %}active{% endif %}">Panier</a>
+                <a href="{{ path('app_logout') }}" class="logout">Se déconnecter</a>
+            {% elseif 'ROLE_ADMIN' in app.user.roles %}
+                <a href="{{ path('products_list') }}" class="{% if app.request.attributes.get('_route') == 'products_list' %}active{% endif %}">Boutique</a>
+                <a href="{{ path('app_logout') }}" class="logout">Se déconnecter</a>
+            {% else %}
+                <a href="{{ path('homepage') }}" class="{% if app.request.attributes.get('_route') == 'homepage' %}active{% endif %}">Accueil</a>
+                <a href="{{ path('app_logout') }}" class="logout">Se déconnecter</a>
+            {% endif %}
         {% else %}
-            <!-- Cas par défaut pour tout autre utilisateur connecté -->
             <a href="{{ path('homepage') }}" class="{% if app.request.attributes.get('_route') == 'homepage' %}active{% endif %}">Accueil</a>
-            <a href="{{ path('app_logout') }}" class="logout">Se déconnecter</a>
+            <a href="{{ path('app_register') }}" class="{% if app.request.attributes.get('_route') == 'app_register' %}active{% endif %}">S'inscrire</a>
+            <a href="{{ path('app_login') }}" class="{% if app.request.attributes.get('_route') == 'app_login' %}active{% endif %}">Se connecter</a>
         {% endif %}
-    
-    {% else %}
-        <!-- Menu pour les utilisateurs non connectés -->
-        <a href="{{ path('homepage') }}" class="{% if app.request.attributes.get('_route') == 'homepage' %}active{% endif %}">Accueil</a>
-        <a href="{{ path('app_register') }}" class="{% if app.request.attributes.get('_route') == 'app_register' %}active{% endif %}">S'inscrire</a>
-        <a href="{{ path('app_login') }}" class="{% if app.request.attributes.get('_route') == 'app_login' %}active{% endif %}">Se connecter</a>
-    {% endif %}
-</nav>
-
-</div>
+        </nav>
+    </div>
 </header>
 
 <main>
@@ -139,6 +155,24 @@
     </div>
 </footer>
 
+<!-- backToTop Button -->
+<button id="backToTop" title="Retour en haut">⬆</button>
+
+<script>
+// Afficher le bouton backToTop à 200px de scroll
+window.addEventListener("scroll", function() {
+    const backToTop = document.getElementById("backToTop");
+    if (window.scrollY > 200) {
+        backToTop.style.display = "flex";
+    } else {
+        backToTop.style.display = "none";
+    }
+});
+
+document.getElementById("backToTop").addEventListener("click", function() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
 
 </body>
 </html>

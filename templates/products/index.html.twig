@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Boutique - Stubborn{% endblock %}
+{% block title %}Stubborn | Boutique en ligne{% endblock %}
 
 {% block body %}
 <style>
@@ -15,10 +15,11 @@
     flex-wrap: wrap;
     gap: 20px;
     justify-content: center;
+    
 }
 
 .block {
-    width: 280px;
+    width: 462px;
 }
 
 .filter {
@@ -46,6 +47,7 @@
     cursor: pointer;
     border-radius: 20px;
     margin-bottom: 10px;
+    margin: 5px 15px 5px;
 }
 
 .filter form button:hover {
@@ -69,8 +71,8 @@
     border-radius: 10px;
     padding: 15px;
     background-color: #fff;
-    width: 100%;
     box-sizing: border-box;
+    max-width:386px;
 }
 
 .product img {
@@ -116,25 +118,27 @@
     border: none;
     width: 6em;
     height: 2em;
+    text-transform: uppercase;
+    
 }
 
 .btn-view:hover {
     background-color: #00236b;
 }
-/* À partir de 655px => gestion flex et styles boutons filtres */
+
+/* À partir de 655px => 2 blocs par ligne */
 @media (min-width: 655px) {
     .block {
         flex: 1 1 45%;
         width: 280px;
     }
-
-
+    .filter {
+        max-width:387px;
+    }
     .filter form button {
         padding: 20px 50px;
-        margin: 5px 15px 5px;
     }
 }
-
 
 /* À partir de 900px => 3 blocs par ligne */
 @media (min-width: 900px) {
@@ -172,7 +176,7 @@
                             <h3>{{ product.name }}</h3>
                             <p>{{ product.price }} €</p>
                         </div>
-                        <a href="{{ path('product_show', { id: product.id }) }}" class="btn-view">VOIR</a>
+                        <a href="{{ path('product_show', { id: product.id }) }}" class="btn-view">Voir</a>
                     </div>
                 </div>
             </div>
@@ -180,4 +184,5 @@
 
     </div>
 </div>
+
 {% endblock %}
