@@ -1,20 +1,56 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello UserController!{% endblock %}
+{% block title %}Compte client | Stubborn{% endblock %}
 
 {% block body %}
 <style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+
+    .client-container{
+        margin:10px;
+    }
+    .client-account {
+        max-width: 600px;
+        margin: 40px auto;
+        border: 5px solid #00236b;
+        border-radius: 30px;
+        padding: 20px;
+        background-color: #eef4ff;
+    }
+
+    .client-account h1 {
+        border-bottom: 2px solid #89b0ff;
+        padding-bottom: 15px;
+        font-size: 16px;
+    }
+
+    .spacing{
+        margin-top:2em;
+    }
+
+    .btn-register,
+    .btn-login {
+        display: block;
+        width: 80%;
+        margin: 15px auto 0 auto;
+        text-align: center;
+        margin-left: 0;
+    }
 </style>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+<div class="client-container">
+<div class="client-account">
+    <h1>Mon compte client</h1>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>C:/Users/CARBALLO/Documents/formation_dev/devoir_13_PHP_ecommerce/stubborn/src/Controller/UserController.php</code></li>
-        <li>Your template at <code>C:/Users/CARBALLO/Documents/formation_dev/devoir_13_PHP_ecommerce/stubborn/templates/user/index.html.twig</code></li>
-    </ul>
+    {% if app.user %}
+        <p class="spacing">Vous êtes connecté en tant que <strong>{{ app.user.userIdentifier }}</strong>. </p>
+             <p><a href="{{ path('app_logout') }}" class="logout-link">Se déconnecter</a></p>
+    {% else %}
+        <p class="spacing">Vous n'êtes pas connecté. </p> 
+        <p>Pour accéder à votre espace client créez un compte ou connectez-vous !</p> 
+       
+        <a href="{{ path('app_register') }}" class="btn-register">Créer un compte</a>
+        <a href="{{ path('app_login') }}" class="btn-login">Se Connecter</a>
+    {% endif %}
+</div>
 </div>
 {% endblock %}
