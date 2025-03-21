@@ -112,7 +112,7 @@
         <h1>{{ product.name }}</h1>
         <p>{{ product.price }} €</p>
 
-        <form method="post">
+        <form id="add-to-cart-form" data-product-id="{{ product.id }}">
             <div class="size-selector">
                 <select name="size" id="size" required>
                     <option value="" disabled selected hidden>Taille</option>
@@ -125,10 +125,47 @@
             </div>
 
             <input type="hidden" name="quantity" value="1">
-
+            <div id="confirmation-message" style="display:none; color: green; margin-top: 15px;">
+                Produit ajouté au panier !
+            </div>
             <button type="submit" class="btn-add">Ajouter au panier</button>
+        </form>
+
         </form>
     </div>
 </div>
 </div>
+
+<script>
+document.getElementById('add-to-cart-form').addEventListener('submit', function(e) {
+    e.preventDefault(); // Ne pas recharger la page
+
+    const productId = this.dataset.productId;
+    const size = document.getElementById('size').value;
+    const quantity = this.querySelector('input[name="quantity"]').value;
+
+    fetch('{{ path("cart_add", {"id": "ID_REPLACE"}) }}'.replace('ID_REPLACE', productId), {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: new URLSearchParams({
+            size: size,
+            quantity: quantity
+        })
+    })
+    .then(response => {
+        if (response.ok) {
+            document.getElementById('confirmation-message').style.display = 'block';
+            setTimeout(() => {
+                document.getElementById('confirmation-message').style.display = 'none';
+            }, 3000);
+        } else {
+            alert('Erreur lors de l\'ajout au panier');
+        }
+    });
+});
+</script>
+
 {% endblock %}

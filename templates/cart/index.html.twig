@@ -4,65 +4,230 @@
 
 {% block body %}
 <style>
+.cart-index {
+    max-width: 1000px;
+    margin: 0px auto;
+    border-radius: 30px;
+    padding: 0 20px;
+    background-color: #eef4ff;
+}
 
-    .cart-container{
-        margin:10px;
-    }
-    .cart-index {
-        max-width: 90%;
-        margin: 40px auto;
-        border: 5px solid #00236b;
-        border-radius: 30px;
-        padding: 20px;
-        background-color: #eef4ff;
+
+
+.cart-item {
+    display: flex;
+    align-items: center;
+    border: 5px solid #00236b;
+    border-radius: 15px;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+.total{
+    text-transform: uppercase;
+}
+.cart-item img {
+    width: 200px;
+    height: auto;
+    border-radius: 10px;
+}
+
+.cart-content {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    margin-left: 20px;
+}
+
+.cart-details {
+    flex-grow: 1;
+    font-size: 20px;
+}
+
+.cart-product-name {
+    font-size: 26px;
+}
+
+.cart-remove {
+    padding: 12px 20px;
+    background-color: #89b0ff;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    text-transform: uppercase;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+    margin-top: 1em;
+    min-width:90%;
+    justify-content: flex-end; 
+}
+
+.cart-remove:hover {
+    background-color: #00236b;
+    color: #fff;
+}
+
+.total {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    margin-top: 30px;
+    gap: 20px;
+}
+
+.total .amount {
+    font-size: 20px;
+    font-weight: bold;
+    color: #00236b;
+}
+
+.btn-finalize {
+    background-color: #ffafa8;
+    border: 3px solid #a80e00;
+    padding: 15px 25px;
+    border-radius: 10px;
+    text-decoration: none;
+    color: #00091d;
+    font-weight: bold;
+    width: fit-content;
+    transition: background-color 0.3s;
+}
+
+.btn-finalize:hover {
+    background-color: #a80e00;
+    
+    color: #fff;
+
+}
+.btn-continue {
+    background-color: #a8ffdd;
+    border: 3px solid #01aa68;
+    padding: 15px 25px;
+    border-radius: 10px;
+    text-decoration: none;
+    color: #00091d;
+    font-weight: bold;
+    width: fit-content;
+    transition: background-color 0.3s;
+}
+
+.btn-continue:hover {
+    background-color: #01aa68;
+    
+    color: #fff;
+
+}
+
+.btn-back {
+    display: inline-block;
+    background-color: #89b0ff;
+    color: #fff;
+    padding: 10px 40px;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s, opacity 0.3s;
+    margin: 2em 0 20em;
+}
+
+.btn-back:hover {
+    background-color: #00236b;
+}
+
+@media (min-width: 650px) {
+
+
+    .cart-content {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
     }
 
-    .cart-index h1 {
-        border-bottom: 2px solid #89b0ff;
-        padding-bottom: 15px;
-        font-size: 16px;
+    .cart-details {
+        margin-right: 20px;
+    }
+}
+
+@media (min-width: 800px) {
+    .total {
+        flex-direction: column;
+        align-items: flex-end;
     }
 
-    table {
+    .cart-content {
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .cart-details {
+        display: flex; 
+        justify-content: space-between;
+        margin-left:2em;
+        text-align: right;
+        width: 100%; 
+    }
+
+    .cart-details p {
+        margin-right: 10px; 
+        white-space: nowrap; 
+    }
+
+    .cart-item form {
+        display: flex;
+        justify-content: flex-end; 
         width: 100%;
-        border-collapse: collapse;
-        margin-top: 20px;
+        
     }
 
-    th, td {
-        border: 1px solid #00236b;
-        padding: 10px;
-        text-align: left;
+    .cart-remove {
+        min-width:150px;
+        justify-content: flex-end; 
+        margin-top: 10em;
     }
 
-    th {
-        background-color: #00236b;
-        color: #fff;
+    .cart-product-name {
+       font-size: 20px;
     }
 
-    tr:nth-child(even) {
-        background-color: #dbe7ff;
-    }
-
-    .total-price {
-        margin-top: 20px;
-        font-size: 18px;
-        font-weight: bold;
-        color: #00236b;
-    }
+}
 
 </style>
-
-<div class="cart-container">
+<nav class="breadcrumb">
+    <a href="{{ path('homepage') }}">Accueil</a> &gt; <a href="{{ path('products_list') }}">Boutique</a> &gt; <span>Panier</span>
+</nav>
 <div class="cart-index">
-    <h1>Mon Panier</h1>
-
     {% if cartProducts is empty %}
         <p>Votre panier est vide.</p>
-    
+        <a href="/products" class="btn-back">Retourner sur la boutique</a>
+    {% else %}
+        {% set total = 0 %}
+        {% for item in cartProducts %}
+            {% set total = total + (item.price * item.quantity) %}
+            <div class="cart-item">
+                <img src="{{ asset(item.product.img) }}" alt="{{ item.product.name }}">
+                <div class="cart-content">
+                    <div class="cart-details">
+                        <p class="cart-product-name"><strong>{{ item.product.name }}</strong></p>
+                        <p>Prix : {{ item.price }} €</p>
+                        <p>Taille : {{ item.size }}</p> 
+                        <p>Quantité : {{ item.quantity }}</p>
+                    </div>
+                    <form action="{{ path('cart_remove', {id: item.product.id, size: item.size}) }}" method="POST">
+                        <button type="submit" class="cart-remove">Retirer du panier</button>
+                    </form>
+                </div>
+            </div>
+        {% endfor %}
+
+        <div class="total">
+            <div class="amount">Total: {{ total|number_format(2, '.', ' ') }} €</div>
+            <a href="#" class="btn-finalize">Finaliser ma commande</a>
+            <a href="{{ path('products_list') }}" class="btn-continue">Continuer mes achats</a>
+        </div>
     {% endif %}
-
-
 </div>
-</div>
+
 {% endblock %}
