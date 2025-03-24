@@ -13,5 +13,8 @@ if ((isset($_SERVER['APP_ENV']) && $_SERVER['APP_ENV'] === 'dev') || (isset($_EN
 }
 
 return function (array $context) {
-    return new Kernel($context['APP_ENV'] ?? 'dev', (bool) ($context['APP_DEBUG'] ?? true));
+    return new Kernel(
+        $_SERVER['APP_ENV'] ?? 'prod',
+        (bool) ($_SERVER['APP_DEBUG'] ?? false)
+    );
 };
