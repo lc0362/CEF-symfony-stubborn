@@ -80,11 +80,11 @@
         "symfony/polyfill-php82": "*"
     },
     "scripts": {
-        "sf-clear-cache": "php bin/console cache:clear --env=prod",
         "auto-scripts": {
             "assets:install %PUBLIC_DIR%": "symfony-cmd",
             "importmap:install": "symfony-cmd"
         },
+        "symfony-clear-cache": "php bin/console cache:clear --env=prod",
         "post-install-cmd": [
             "@auto-scripts"
         ]
