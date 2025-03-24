@@ -2,11 +2,11 @@
 
 use App\Kernel;
 
-require_once dirname(__DIR__) . '/vendor/autoload_runtime.php';
+require_once dirname(__DIR__).'/vendor/autoload_runtime.php';
 
 return function (array $context) {
-    return new Kernel(
-        $_SERVER['APP_ENV'] ?? 'prod',
-        ($_SERVER['APP_DEBUG'] ?? '0') === '1'
-    );
+    $env = $_SERVER['APP_ENV'] ?? $_ENV['APP_ENV'] ?? 'prod';
+    $debug = filter_var($_SERVER['APP_DEBUG'] ?? $_ENV['APP_DEBUG'] ?? false, FILTER_VALIDATE_BOOLEAN);
+    
+    return new Kernel($env, $debug);
 };
