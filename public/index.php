@@ -1,12 +1,13 @@
 <?php
-
 use App\Kernel;
+use Symfony\Component\Dotenv\Dotenv;
 
 require_once dirname(__DIR__).'/vendor/autoload_runtime.php';
 
+if (file_exists(dirname(__DIR__).'/.env')) {
+    (new Dotenv())->bootEnv(dirname(__DIR__).'/.env');
+}
+
 return function (array $context) {
-    $env = $_SERVER['APP_ENV'] ?? $_ENV['APP_ENV'] ?? 'prod';
-    $debug = filter_var($_SERVER['APP_DEBUG'] ?? $_ENV['APP_DEBUG'] ?? false, FILTER_VALIDATE_BOOLEAN);
-    
-    return new Kernel($env, $debug);
+    return new Kernel($context['APP_ENV'], (bool) $context['APP_DEBUG']);
 };
