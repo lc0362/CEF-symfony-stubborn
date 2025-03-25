@@ -12,7 +12,7 @@
 
 .products-wrapper {
     display: flex;
-    flex-wrap: wrap;
+    flex-flow: row wrap;
     gap: 20px;
 }
 
@@ -109,7 +109,8 @@
 @media (min-width: 655px) {
     .block {
         flex: 1 1 45%;
-        width: 280px;
+
+        max-width: 299px;
     }
     .filter {
         max-width:387px;
