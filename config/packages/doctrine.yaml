@@ -1,7 +1,6 @@
 doctrine:
     dbal:
         url: '%env(resolve:DATABASE_URL)%'
-        # server_version: '16' # Active si tu veux forcer la version
         profiling_collect_backtrace: '%kernel.debug%'
         use_savepoints: true
 
@@ -27,18 +26,16 @@ doctrine:
 when@test:
     doctrine:
         dbal:
-            dbname_suffix: '_test%env(default::TEST_TOKEN)%'
             url: '%env(resolve:DATABASE_URL)%'
-            driver_options:
-                1002: "SET NAMES 'UTF8'"
+            dbname_suffix: '_test%env(default::TEST_TOKEN)%'
+            # driver_options plus supporté
+            # Supprimer ou convertir en SQL natif si besoin
 
 when@prod:
     doctrine:
         dbal:
             url: '%env(resolve:DATABASE_URL)%'
-            driver_options:
-                1002: 'SET NAMES UTF8'
-
+            # Supprimer driver_options car non supporté
         orm:
             auto_generate_proxy_classes: false
             proxy_dir: '%kernel.build_dir%/doctrine/orm/Proxies'
