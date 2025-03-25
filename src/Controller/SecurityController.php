@@ -35,4 +35,4 @@ class SecurityController extends AbstractController
     {
         throw new \LogicException('Méthode interceptée par le firewall pour la déconnexion.');
     }
-}a
+}
