@@ -94,7 +94,7 @@
 
     <h1>Se connecter</h1>
     <form method="post" action="{{ path('app_login') }}">
-        <input type="hidden" name="_csrf_token" value="{{ csrf_token }}">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
         <label>Nom d'utilisateur :</label>
         <input type="text" name="_username" value="{{ last_username }}" required>
