@@ -93,18 +93,16 @@
     {% endif %}
 
     <h1>Se connecter</h1>
-    <form method="post">
-        <label for="inputName">Nom d'utilisateur :</label>
-        <input type="text" value="{{ last_username }}" name="_username" id="inputName" autocomplete="username" required autofocus>
+    <form method="post" action="{{ path('app_login') }}">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token }}">
 
-        <label for="inputPassword">Mot de passe :</label>
-        <input type="password" name="password" id="inputPassword" autocomplete="current-password" required>
+        <label>Nom d'utilisateur :</label>
+        <input type="text" name="_username" value="{{ last_username }}" required>
 
-        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+        <label>Mot de passe :</label>
+        <input type="password" name="password" required>
 
-        <button class="btn-submit" type="submit">Se Connecter</button>
-
-        <a href="{{ path('app_forgot_password') }}" class="forgot-password">Mot de passe oublié</a>
+        <button type="submit">Se connecter</button>
     </form>
 
     <div class="section-register">
